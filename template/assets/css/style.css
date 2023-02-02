@@ -20835,3 +20835,11 @@ div.tagsinput {
   flex-grow: 1; }
 
 /*# sourceMappingURL=maps/style.css.map */
+
+.card-title {
+  color: $card-title-color;
+  margin-bottom: 1rem;
+  text-transform: capitalize;
+  text-align: center;
+}
+

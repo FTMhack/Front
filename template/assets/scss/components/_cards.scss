@@ -10,8 +10,9 @@
   }
   .card-title {
     color: $card-title-color;
-    margin-bottom: 1.125rem;
+    margin-bottom: 1rem;
     text-transform: capitalize;
+    text-align: center;
   }
   .card-subtitle {
     @extend .text-gray;
