@@ -1,5 +1,5 @@
 
-
+var riskScore = 65;
 (function($) {
   'use strict';
   $.fn.andSelf = function() {
@@ -10,18 +10,16 @@
       var areaData = {
         labels: ["Risk score"],
         datasets: [{
-            data: [75,25],
-            backgroundColor: [
-              "#00d25b","#C0C0C0","#ffab00"
-            ]
-          }
+          data: [riskScore, 100-riskScore],
+          backgroundColor: [riskScore > 50 ? "#00d25b" : "#ffab00"]
+         }
         ]
       };
       var areaOptions = {
         responsive: true,
         maintainAspectRatio: true,
         segmentShowStroke: false,
-        cutoutPercentage: 60,
+        cutoutPercentage: 70,
         elements: {
           arc: {
               borderWidth: 0
@@ -41,15 +39,15 @@
               ctx = chart.chart.ctx;
       
           ctx.restore();
-          var fontSize = 2;
+          var fontSize = 3;
           ctx.font = fontSize + "rem sans-serif";
           ctx.textAlign = 'left';
           ctx.textBaseline = "middle";
           ctx.fillStyle = "#ffffff";
       
-          var text = "75", 
-              textX = Math.round((width - ctx.measureText(text).width) / 2),
-              textY = height / 2.4;
+          var text = riskScore, 
+              textX = Math.round((width - ctx.measureText(text).width) / 1.98),
+              textY = height / 2.1;
       
           ctx.fillText(text, textX, textY);
 
@@ -60,9 +58,9 @@
           ctx.textBaseline = "middle";
           ctx.fillStyle = "#6c7293";
 
-          var texts = "risk score", 
-              textsX = Math.round((width - ctx.measureText(text).width) / 1.93),
-              textsY = height / 1.7;
+          var texts = "", 
+              textsX = Math.round((width - ctx.measureText(text).width) / 1.5),
+              textsY = height / 1;
       
           ctx.fillText(texts, textsX, textsY);
           ctx.save();
@@ -76,5 +74,6 @@
         plugins: transactionhistoryChartPlugins
       });
     }
+    $("#description").html(riskScore < 25 ? "Your score is low. To improve your security, follow our instructions and take the necessary steps to increase it." : riskScore >= 25 && riskScore <= 50 ? "Your score is okay, but there's always room for improvement. Take a look at our guidelines and see what steps you can take to enhance your security." : "You're really good at security! Keep up the good work and continue to prioritize safety in your online transactions.");
     });
 })(jQuery);
