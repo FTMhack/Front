@@ -20843,3 +20843,13 @@ div.tagsinput {
   text-align: center;
 }
 
+.description {
+  color: $card-title-color;
+  margin-top: 7rem;
+  text-align: center;
+  width: 100%;
+  font-weight: 500
+
+}
+
+
