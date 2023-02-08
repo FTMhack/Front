@@ -55,7 +55,7 @@
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
-          <li class="nav-item menu-items active">
+          <li class="nav-item menu-items">
             <a class="nav-link" href="SC-Interactions.html">
               <span class="menu-icon">
                 <i class="mdi mdi-speedometer"></i>
@@ -63,12 +63,12 @@
               <span class="menu-title">SC interactions</span>
             </a>
           </li>
-          <li class="nav-item menu-items">
+          <li class="nav-item menu-items active">
             <a class="nav-link" href="infinite_approval.html">
               <span class="menu-icon">
                 <i class="mdi mdi-speedometer"></i>
               </span>
-              <span class="menu-title">Unlimited approvals</span>
+              <span class="menu-title">Infinite approvals</span>
             </a>
           </li>
           <li class="nav-item menu-items">
@@ -154,25 +154,19 @@
                 <div class="card">
                   <div class="card-body">
                     <div class="d-flex flex-row justify-content-between">
-                      <h4 class="card-title mb-1">Smart contracts interactions - Brief explanation</h4>
+                      <h4 class="card-title mb-1">Unlimited approvals - Brief explanation</h4>
                       <p class="text-muted mb-1"></p>
                     </div>
                     <div class="row">
                       <tr>
                         <td>
-                          <p style="font-size: 16px; font-weight: 400; color: #6c7293; margin-top: 20px;">Interacting with suspicious or malicious smart contracts and decentralized applications (dapps) can put your funds and wallet at risk. These types of contracts and dapps are often created by hackers or scammers with the intention of stealing users' cryptocurrency or personal information.</p>
+                          <p style="font-size: 16px; font-weight: 400; color: #6c7293; margin-top: 20px;">Unlimited Approval is a feature that enables users to grant platforms and smart contracts the permission to spend tokens/ coins on your behalf without limit.
+                            Normally, when swapping on a specific AMM such as Uniswap, users need to approve the smart contract/ platform to transfer those tokens on their behalf. When swapping a specific amount, you can choose to set an allowance of that exact amount. </p>
                         </td>
                         <td>
-                          <p style="font-size: 16px; font-weight: 400; color: #6c7293;">One common tactic used by malicious contracts is to masquerade as legitimate ones, tricking users into sending their funds to the attacker's wallet. In some cases, the attacker may even be able to take control of the user's wallet, allowing them to steal their entire balance.</p>
-                        </td>
-                        <td>
-                          <p style="font-size: 16px; font-weight: 400; color: #6c7293;">Additionally, smart contracts and dapps can contain vulnerabilities or bugs that can be exploited by attackers. For example, a contract with a critical security flaw could allow an attacker to drain all the funds stored within it.</p>
-                        </td>
-                        <td>
-                          <p style="font-size: 16px; font-weight: 400; color: #6c7293;">It is important to thoroughly research and verify the authenticity of any smart contract or dapp before interacting with it. This can be done by reviewing the code, checking for previous security audits, and reading user reviews.</p>
-                        </td>
-                        <td>
-                          <p style="font-size: 16px; font-weight: 400; color: #6c7293;">To ensure the safety of your funds and wallet, it is always best to only interact with smart contracts and dapps that have been thoroughly vetted and are considered to be trustworthy by the community.</p>
+                          <p style="font-size: 16px; font-weight: 400; color: #6c7293; margin-top: 20px;">
+                            When giving these platforms/ smart contracts unlimited approval, users will face 2 main risks: malicious projects and bug exploits. This risk gives hackers the right to use the approved tokens for many lucrative purposes.
+Therefore, in order to mitigate these risks for users, Coin98 only integrates the Unlimited Approval function with, the top-tier AMMs in the market with transparent information, trustworthy teams, and a large number of users.</p>
                         </td>
                       </tr>
                     </div>
@@ -202,7 +196,7 @@
                       <h4 class="card-title">Actions you can take to improve security</h4>
                       <tr>
                         <td>
-                          <p style="font-size: 16px; font-weight: 400; color: #6c7293; margin-top: 20px;">In this case, the best way to improve security is to avoid interacting with suspicious smart contracts and revoke any approvals that you have already given to the contract. It is important to be vigilant and take all the necessary precautions when engaging in smart contract activities to ensure that your funds are safe and secure.</p>
+                          <p style="font-size: 16px; font-weight: 400; color: #6c7293; margin-top: 20px;">In this case, the optimal way to enhance security is to eliminate the unlimited approval. On the table below, you will find a list of your approvals. To remove an approval, simply click the button on the right. Alternatively, you can utilize the 'Remove Batch' feature to remove approvals for up to ten contracts simultaneously.</p>
                         </td>
                       </tr>
                     </div>
@@ -211,7 +205,7 @@
               </div>
             </div>
             <div class="row ">
-              <div class="col-12 grid-margin">
+              <div class="col-9 grid-margin">
                 <div class="card">
                   <div class="card-body">
                     <h4 class="card-title">Your last interactions</h4>
@@ -233,7 +227,7 @@
                             <td>01/01/2023</td>
                             <td>0.0321FTM</td>
                             <td>
-                              <div class="badge badge-outline-success">Low</div>
+                              <button type="button" class="btn btn-inverse-warning btn-fw">Remove approval</button>
                             </td>
                           </tr>
                           <tr>
@@ -242,7 +236,7 @@
                             <td>01/01/2023</td>
                             <td>0.0321FTM</td>
                             <td>
-                              <div class="badge badge-outline-warning">Mid</div>
+                              <button type="button" class="btn btn-inverse-warning btn-fw">Remove approval</button>
                             </td>
                           </tr>
                           <tr>
@@ -251,7 +245,7 @@
                             <td>01/01/2023</td>
                             <td>0.0321FTM</td>
                             <td>
-                              <div class="badge badge-outline-danger">High</div>
+                              <button type="button" class="btn btn-inverse-warning btn-fw">Remove approval</button>
                             </td>
                           </tr>
                           <tr>
@@ -260,7 +254,7 @@
                             <td>01/01/2023</td>
                             <td>0.0321FTM</td>
                             <td>
-                              <div class="badge badge-outline-success">Low</div>
+                              <button type="button" class="btn btn-inverse-warning btn-fw">Remove approval</button>
                             </td>
                           </tr>
                           <tr>
@@ -269,13 +263,26 @@
                             <td>01/01/2023</td>
                             <td>0.0321FTM</td>
                             <td>
-                              <div class="badge badge-outline-success">Low</div>
+                              <button type="button" class="btn btn-inverse-warning btn-fw">Remove approval</button>
                             </td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
                   </div>
+                </div>
+                </div>
+                <div class="col-md-3 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body" style="display: flex; flex-direction: column; align-items: center;">
+                      <h4 class="card-title">Remove batch approvals</h4>
+                      <p style="font-size: 16px; font-weight: 400; color: #6c7293; margin-top: 20px;">Clicking the button will remove the first 10 approvals in the list, you will have to accept 10 transactions on your wallet.</p>
+                      <div style="margin-top: 60px;">
+                        <button type="button" class="btn btn-inverse-danger btn-fw" style="font-size: 15px; padding: 15px 40px;">Batch Removal</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 </div>
               </div>
             </div>
