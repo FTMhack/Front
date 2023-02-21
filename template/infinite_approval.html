@@ -39,7 +39,7 @@
                   <span class="count bg-success"></span>
                 </div>
                 <div class="profile-name">
-                  <h5 class="mb-0 font-weight-normal">0x00000..12</h5>
+                  <h5 class="mb-0 font-weight-normal" id="walletAddress">0x00000..12</h5>
                 </div>
               </div>
             </div>
@@ -128,7 +128,7 @@
             </ul>
             <ul class="navbar-nav navbar-nav-right">
               <li class="nav-item dropdown d-none d-lg-block">
-                <a class="nav-link btn btn-success create-new-button" id="createbuttonDropdown" data-bs-toggle="dropdown" aria-expanded="false" href="#">Connect Wallet</a>
+                <a class="nav-link btn btn-success create-new-button" id="connectButton" aria-expanded="false">Connect Wallet</a>
               </li>
               <li class="nav-item dropdown border-left">
               </li>
@@ -205,74 +205,75 @@ Therefore, in order to mitigate these risks for users, Coin98 only integrates th
               </div>
             </div>
             <div class="row ">
-              <div class="col-9 grid-margin">
+              <div class="col-10 grid-margin">
                 <div class="card">
                   <div class="card-body">
                     <h4 class="card-title">Your last interactions</h4>
                     <div class="table-responsive">
-                      <table class="table">
+                      <table>
                         <thead>
                           <tr>
-                            <th> Address </th>
-                            <th> Type </th>
                             <th> Date </th>
-                            <th> Gas </th>
+                            <th> Hash </th>
+                            <th> From </th>
+                            <th> to </th>
+                            <th> Amount </th>
                             <th></th>
                           </tr>
                         </thead>
-                        <tbody>
-                          <tr>
-                            <td>0x00000..12</td>
-                            <td>Approval</td>
-                            <td>01/01/2023</td>
-                            <td>0.0321FTM</td>
+                        <tbody id="approvals">
+                          <!-- <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                             <td>
                               <button type="button" class="btn btn-inverse-warning btn-fw">Remove approval</button>
                             </td>
                           </tr>
                           <tr>
-                            <td>0x00000..12</td>
-                            <td>Approval</td>
-                            <td>01/01/2023</td>
-                            <td>0.0321FTM</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                             <td>
                               <button type="button" class="btn btn-inverse-warning btn-fw">Remove approval</button>
                             </td>
                           </tr>
                           <tr>
-                            <td>0x00000..12</td>
-                            <td>Approval</td>
-                            <td>01/01/2023</td>
-                            <td>0.0321FTM</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                             <td>
                               <button type="button" class="btn btn-inverse-warning btn-fw">Remove approval</button>
                             </td>
                           </tr>
                           <tr>
-                            <td>0x00000..12</td>
-                            <td>Approval</td>
-                            <td>01/01/2023</td>
-                            <td>0.0321FTM</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                             <td>
                               <button type="button" class="btn btn-inverse-warning btn-fw">Remove approval</button>
                             </td>
                           </tr>
                           <tr>
-                            <td>0x00000..12</td>
-                            <td>Approval</td>
-                            <td>01/01/2023</td>
-                            <td>0.0321FTM</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                             <td>
                               <button type="button" class="btn btn-inverse-warning btn-fw">Remove approval</button>
                             </td>
-                          </tr>
+                          </tr> -->
                         </tbody>
                       </table>
                     </div>
                   </div>
                 </div>
                 </div>
-                <div class="col-md-3 grid-margin stretch-card">
+                <div class="col-md-2 grid-margin stretch-card">
                   <div class="card">
                     <div class="card-body" style="display: flex; flex-direction: column; align-items: center;">
                       <h4 class="card-title">Remove batch approvals</h4>
@@ -318,6 +319,7 @@ Therefore, in order to mitigate these risks for users, Coin98 only integrates th
     <!-- endinject -->
     <!-- Custom js for this page -->
     <script src="assets/js/dashboard.js"></script>
+    <script src="assets/js/web3.js"></script>
     <!-- End custom js for this page -->
   </body>
 </html>
