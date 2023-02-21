@@ -127,7 +127,7 @@
             <ul class="navbar-nav w-100">
             </ul>
             <ul class="navbar-nav navbar-nav-right">
-              <li class="nav-item dropdown d-none d-lg-block">
+              <li class="nav-item dropdown d-none d-lg-block" id="disconnect">
                 <a class="nav-link btn btn-success create-new-button" id="connectButton" aria-expanded="false">Connect Wallet</a>
               </li>
               <li class="nav-item dropdown border-left">
@@ -208,65 +208,19 @@ Therefore, in order to mitigate these risks for users, Coin98 only integrates th
               <div class="col-10 grid-margin">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Your last interactions</h4>
+                    <h4 class="card-title">Your Approvals</h4>
                     <div class="table-responsive">
-                      <table>
+                      <table class="table">
                         <thead>
                           <tr>
                             <th> Date </th>
                             <th> Hash </th>
-                            <th> From </th>
-                            <th> to </th>
+                            <th> interact with address </th>
                             <th> Amount </th>
                             <th></th>
                           </tr>
                         </thead>
                         <tbody id="approvals">
-                          <!-- <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                              <button type="button" class="btn btn-inverse-warning btn-fw">Remove approval</button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                              <button type="button" class="btn btn-inverse-warning btn-fw">Remove approval</button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                              <button type="button" class="btn btn-inverse-warning btn-fw">Remove approval</button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                              <button type="button" class="btn btn-inverse-warning btn-fw">Remove approval</button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                              <button type="button" class="btn btn-inverse-warning btn-fw">Remove approval</button>
-                            </td>
-                          </tr> -->
                         </tbody>
                       </table>
                     </div>
