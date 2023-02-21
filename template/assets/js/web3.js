@@ -22,10 +22,7 @@ const initialize = () => {
       const account = accounts[0];
       const accountLength = account.length;
       const truncatedAccount = accountLength > 8 ? account.slice(0, 4) + "..." + account.slice(accountLength - 4) : account;
-      getAccountsResult.innerHTML = truncatedAccount || 'Not able to get accounts';
-
-      getAccountsButton.innerHTML = 'Disconnect';
-      getAccountsButton.style.backgroundColor = 'red';
+      getAccountsResult.innerHTML = "<a href='https://ftmscan.com/address/" + accounts[0] + "' target='_blank'>" + truncatedAccount + "</a>" || 'Not able to get accounts';
       getAccountsButton.remove();
       Disconnect.innerHTML = '<p style="font-size: 12px; font-weight: 400; color: #6c7293; margin-top: 20px;">You are connected to your wallet</p>';
       //infinite approvals
