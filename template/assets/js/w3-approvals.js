@@ -12,6 +12,11 @@ const initialize = () => {
     const { ethereum } = window;
     return Boolean(ethereum && ethereum.isMetaMask);
   };
+  const isMetaMaskInstalledRpc = () => {
+    //Have to check the ethereum binding on the window object to see if it's installed
+    const { ethereum } = window;
+    return Boolean(ethereum && ethereum.isMetaMask);
+  };
 
   const onClickConnect = async () => {
     try {
@@ -55,37 +60,29 @@ const initialize = () => {
     } catch (error) {
       console.error(error);
     }
+  }; 
+  
+  function MetaMaskClientCheck() {
+  //Now we check to see if Metmask is installed
+  if (!isMetaMaskInstalled()) {
+    //If it isn't installed we ask the user to click to install it
+    onboardButton.innerText = 'Click here to install MetaMask!';
+    //When the button is clicked we call th is function
+    onboardButton.onclick = onClickInstall;
+    //The button is now disabled
+    onboardButton.disabled = false;
+  } else {
+    //If MetaMask is installed we ask the user to connect to their wallet
+    onboardButton.innerText = 'Connect Wallet';
+    //When the button is clicked we call this function to connect the users MetaMask Wallet
+    onboardButton.onclick = onClickConnect;
+    //The button is now disabled
+    onboardButton.disabled = false;
+  }
   };
-
-  const MetaMaskClientCheck = () => {
-    //Now we check to see if Metmask is installed
-    if (!isMetaMaskInstalled()) {
-      //If it isn't installed we ask the user to click to install it
-      onboardButton.innerText = 'Click here to install MetaMask!';
-      //When the button is clicked we call th is function
-      onboardButton.onclick = onClickInstall;
-      //The button is now disabled
-      onboardButton.disabled = false;
-    } else {
-      //If MetaMask is installed we ask the user to connect to their wallet
-      onboardButton.innerText = 'Connect';
-      //When the button is clicked we call this function to connect the users MetaMask Wallet
-      onboardButton.onclick = onClickConnect;
-      //The button is now disabled
-      onboardButton.disabled = false;
-    }
-  };
-
-  //Eth_Accounts-getAccountsButton
-  getAccountsButton.addEventListener('click', async () => {
-    //we use eth_accounts because it returns a list of addresses owned by us.
-    const accounts = await ethereum.request({ method: 'eth_accounts' });
-    //We take the first address in the array of addresses and display it
-    getAccountsResult.innerHTML = accounts[0] || 'Not able to get accounts';
-
-  });
 
   MetaMaskClientCheck();
+  console.log('MetaMaskClientCheck called')
 };
 
 window.addEventListener('DOMContentLoaded', initialize);

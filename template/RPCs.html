@@ -39,7 +39,7 @@
                   <span class="count bg-success"></span>
                 </div>
                 <div class="profile-name">
-                  <h5 class="mb-0 font-weight-normal">0x00000..12</h5>
+                  <h5 class="mb-0 font-weight-normal" id="walletAddressRpc">Not connected</h5>
                 </div>
               </div>
             </div>
@@ -127,8 +127,8 @@
             <ul class="navbar-nav w-100">
             </ul>
             <ul class="navbar-nav navbar-nav-right">
-              <li class="nav-item dropdown d-none d-lg-block">
-                <a class="nav-link btn btn-success create-new-button" id="createbuttonDropdown" data-bs-toggle="dropdown" aria-expanded="false" href="#">Connect Wallet</a>
+              <li class="nav-item dropdown d-none d-lg-block" id="disconnectRpc">
+                <a class="nav-link btn btn-success create-new-button" id="connectButtonRpc" aria-expanded="false">Connect Wallet</a>
               </li>
               <li class="nav-item dropdown border-left">
               </li>
@@ -311,6 +311,7 @@ To avoid these risks, it's important to only use RPIs that are secured with encr
     <!-- endinject -->
     <!-- Custom js for this page -->
     <script src="assets/js/dashboard.js"></script>
+    <script src="assets/js/w3-rpc.js"></script>
     <!-- End custom js for this page -->
   </body>
 </html>
