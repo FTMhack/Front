@@ -200,7 +200,7 @@ To avoid these risks, it's important to only use RPIs that are secured with encr
                       <h4 class="card-title">Actions you can take to improve security</h4>
                       <tr>
                         <td>
-                          <p style="font-size: 16px; font-weight: 400; color: #6c7293; margin-top: 20px;">In this case, the optimal way to enhance security is to remove unsecrued or compromised RPCs and use only the one that are trusted by the community. On the table below, you will find the list of your RPCs with the security score. To remove an unsecured/compromised RPC, simply click the button on the right. you can find a list of trusted and secure RPCs on <a href="https://chainlist.org/" target="_blank" >chainlist</a></p>
+                          <p style="font-size: 16px; font-weight: 400; color: #6c7293; margin-top: 20px;">In this scenario, the most effective way to improve security is to eliminate unsecured or compromised RPCs and only use the ones that are trusted by the community. The table below provides a list of the trusted RPCs for the network to which you are connected. We recommend that you manually review the information in your MetaMask settings (as we cannot access it through APIs) and remove any networks that are using untrusted links.</p>
                         </td>
                       </tr>
                     </div>
@@ -212,64 +212,20 @@ To avoid these risks, it's important to only use RPIs that are secured with encr
               <div class="col-12 grid-margin">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Your wallet RPCs</h4>
+                    <h4 class="card-title">Trusted settings for the chain you are connect with</h4>
                     <div class="table-responsive">
                       <table class="table">
                         <thead>
                           <tr>
-                            <th> Network name </th>
-                            <th> RPC url </th>
-                            <th> Chain ID </th>
-                            <th> Risk </th>
-                            <th> </th>
+                            <th> Network ID </th>
+                            <th> Name </th>
+                            <th> Block Explorer Url </th>
+                            <th> Rpc links </th>
+                            <th> Symbol</th>
+                            <th> Decimals </th>
                           </tr>
                         </thead>
-                        <tbody>
-                          <tr>
-                            <td>Fantom</td>
-                            <td>xxx.xxx.xxx</td>
-                            <td>06</td>
-                            <td><div class="badge badge-outline-success">Low</div></td>
-                            <td>
-                              <button type="button" class="btn btn-inverse-warning btn-fw">Remove RPC</button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Fantom</td>
-                            <td>xxx.xxx.xxx</td>
-                            <td>06</td>
-                            <td><div class="badge badge-outline-warning">Mid</div></td>
-                            <td>
-                              <button type="button" class="btn btn-inverse-warning btn-fw">Remove RPC</button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Fantom</td>
-                            <td>xxx.xxx.xxx</td>
-                            <td>06</td>
-                            <td><div class="badge badge-outline-danger">High</div></td>
-                            <td>
-                              <button type="button" class="btn btn-inverse-warning btn-fw">Remove RPC</button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Fantom</td>
-                            <td>xxx.xxx.xxx</td>
-                            <td>06</td>
-                            <td><div class="badge badge-outline-danger">High</div></td>
-                            <td>
-                              <button type="button" class="btn btn-inverse-warning btn-fw">Remove RPC</button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Fantom</td>
-                            <td>xxx.xxx.xxx</td>
-                            <td>06</td>
-                            <td><div class="badge badge-outline-warning">Mid</div></td>
-                            <td>
-                              <button type="button" class="btn btn-inverse-warning btn-fw">Remove RPC</button>
-                            </td>
-                          </tr>
+                        <tbody id="rpcInfos">
                         </tbody>
                       </table>
                     </div>

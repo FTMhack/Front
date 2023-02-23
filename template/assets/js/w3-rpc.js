@@ -27,16 +27,73 @@ const initialize = () => {
       DisconnectRpc.innerHTML = '<p style="font-size: 12px; font-weight: 400; color: #6c7293; margin-top: 20px;">You are connected to your wallet</p>';
       //RPCs data
       // Retrieve the chain ID of the currently selected network
-      const chainId = await ethereum.request({ method: 'eth_chainId' });
-
-      // Retrieve the RPC URL for the selected network
-      const rpcUrl = await ethereum.request({
-        method: 'net_version',
-        params: [chainId]
-      });
-      console.log(rpcUrl, chainId);
-
+      // const chainId0 = await ethereum.request({ method: 'net_version' });
+      // const provider = window.ethereum;
+      // const chainId = chainId0-1;
+      // const chainListResponse = await fetch('https://chainid.network/chains.json');
+      // const chainList = await chainListResponse.json();
+      // console.log(chainId0, chainId, chainList);
+      // //chech if the chain ID is inside the chain list and print the chain info corrispondent to the chain id
+      // if (chainList[chainId]) {
+      //   const chainInfo = chainList[chainId];
+      //   console.log(chainInfo);
+      //   console.log(chainInfo.name);
+      //   console.log(chainInfo.chainId);
+      //   console.log(chainInfo.icon);
+      //   console.log(chainInfo.explorers[0].url);
+      //   document.getElementById('chainNameRpc').innerHTML = chainInfo.name;
+      //   document.getElementById('chainIdRpc').innerHTML = chainInfo.chainId;
+      //   document.getElementById('chainIconRpc').innerHTML = "<img src='" + chainInfo.icon + "' alt='chain icon' style='width: 20px; height: 20px;'>";
+      //   document.getElementById('chainExplorerRpc').innerHTML = "<a href='" + chainInfo.explorer + "' target='_blank'>View on explorer</a>";
+      // } else {
+      //   console.log('Chain ID not found');
+      // }
+      const provider = window.ethereum;
+      const networkId = await provider.request({ method: 'eth_chainId' });
+      const networkIdDecimal = parseInt(networkId, 16);
+      const networkListening = await provider.request({ method: 'net_listening' });
+      const chainData = await getChainData(networkIdDecimal);
       
+      console.log('Chain ID:', chainData.chainId);
+      console.log('Chain name:', chainData.name);
+      console.log('RPC URL:', chainData.rpcUrl);
+      console.log('Native currency:', chainData.nativeCurrencyName);
+      console.log('Symbol:', chainData.nativeCurrencySymbol);
+      console.log('Decimals:', chainData.nativeCurrencyDecimals);
+      console.log('Block explorer URL:', chainData.blockExplorerUrl);
+      console.log('Listening:', networkListening);
+      
+      async function getChainData(networkId) {
+        const response = await fetch('https://chainid.network/chains.json');
+        const data = await response.json();
+        for (const chainData of Object.values(data)) {
+          if (chainData.chainId === networkId) {
+            return {
+              chainId: chainData.chainId,
+              name: chainData.name,
+              rpcUrl: chainData.rpc,
+              nativeCurrencyName: chainData.nativeCurrency.name,
+              nativeCurrencySymbol: chainData.nativeCurrency.symbol,
+              nativeCurrencyDecimals: chainData.nativeCurrency.decimals,
+              blockExplorerUrl: chainData.explorers[0].url,
+            };
+          }
+        }
+        throw new Error('Unknown network ID');
+      }
+      // Create a new table row and insert data
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${chainData.chainId}</td>
+        <td>${chainData.name}</td>
+        <td>${chainData.blockExplorerUrl}</td>
+        <td>${chainData.rpcUrl.join('<br>')}</td>
+        <td>${chainData.nativeCurrencySymbol}</td>
+        <td>${chainData.nativeCurrencyDecimals}</td>
+      `;
+
+      // Append the row to the table
+      document.getElementById('rpcInfos').appendChild(row);
     } catch (error) {
       console.error(error);
     }
