@@ -1,6 +1,33 @@
+//create a new network based on the data extracted from chainlist.json 
+async function createNewNetwork(chainData) {
+  const params = [
+    {
+      chainId: `0x${parseInt(chainData.chainId).toString(16)}`,
+      chainName: chainData.name,
+      nativeCurrency: {
+        name: chainData.nativeCurrencyName,
+        symbol: chainData.nativeCurrencySymbol,
+        decimals: chainData.nativeCurrencyDecimals,
+      },
+      rpcUrls: [chainData.rpcUrl[0]],
+      blockExplorerUrls: [chainData.blockExplorerUrl],
+    },
+  ];
+
+  try {
+    await ethereum.request({
+      method: "wallet_addEthereumChain",
+      params,
+    });
+    console.log("Successfully added new network");
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
 const initialize = () => {
   //Basic Actions Section
-  const apikey = "P15VH8DXKCN3ZRDS66RDT9KVY9KJ3FTUV4";
 
   const isMetaMaskInstalledRpc = () => {
     //Have to check the ethereum binding on the window object to see if it's installed
@@ -25,43 +52,11 @@ const initialize = () => {
       getAccountsResultRpc.innerHTML = "<a href='https://ftmscan.com/address/" + accountRpc + "' target='_blank'>" + truncatedAccountRpc + "</a>" || 'Not able to get accounts';
       getAccountsButtonRpc.remove();
       DisconnectRpc.innerHTML = '<p style="font-size: 12px; font-weight: 400; color: #6c7293; margin-top: 20px;">You are connected to your wallet</p>';
-      //RPCs data
-      // Retrieve the chain ID of the currently selected network
-      // const chainId0 = await ethereum.request({ method: 'net_version' });
-      // const provider = window.ethereum;
-      // const chainId = chainId0-1;
-      // const chainListResponse = await fetch('https://chainid.network/chains.json');
-      // const chainList = await chainListResponse.json();
-      // console.log(chainId0, chainId, chainList);
-      // //chech if the chain ID is inside the chain list and print the chain info corrispondent to the chain id
-      // if (chainList[chainId]) {
-      //   const chainInfo = chainList[chainId];
-      //   console.log(chainInfo);
-      //   console.log(chainInfo.name);
-      //   console.log(chainInfo.chainId);
-      //   console.log(chainInfo.icon);
-      //   console.log(chainInfo.explorers[0].url);
-      //   document.getElementById('chainNameRpc').innerHTML = chainInfo.name;
-      //   document.getElementById('chainIdRpc').innerHTML = chainInfo.chainId;
-      //   document.getElementById('chainIconRpc').innerHTML = "<img src='" + chainInfo.icon + "' alt='chain icon' style='width: 20px; height: 20px;'>";
-      //   document.getElementById('chainExplorerRpc').innerHTML = "<a href='" + chainInfo.explorer + "' target='_blank'>View on explorer</a>";
-      // } else {
-      //   console.log('Chain ID not found');
-      // }
       const provider = window.ethereum;
       const networkId = await provider.request({ method: 'eth_chainId' });
       const networkIdDecimal = parseInt(networkId, 16);
       const networkListening = await provider.request({ method: 'net_listening' });
       const chainData = await getChainData(networkIdDecimal);
-      
-      console.log('Chain ID:', chainData.chainId);
-      console.log('Chain name:', chainData.name);
-      console.log('RPC URL:', chainData.rpcUrl);
-      console.log('Native currency:', chainData.nativeCurrencyName);
-      console.log('Symbol:', chainData.nativeCurrencySymbol);
-      console.log('Decimals:', chainData.nativeCurrencyDecimals);
-      console.log('Block explorer URL:', chainData.blockExplorerUrl);
-      console.log('Listening:', networkListening);
       
       async function getChainData(networkId) {
         const response = await fetch('https://chainid.network/chains.json');
@@ -81,6 +76,8 @@ const initialize = () => {
         }
         throw new Error('Unknown network ID');
       }
+
+
       // Create a new table row and insert data
       const row = document.createElement('tr');
       row.innerHTML = `
@@ -90,6 +87,15 @@ const initialize = () => {
         <td>${chainData.rpcUrl.join('<br>')}</td>
         <td>${chainData.nativeCurrencySymbol}</td>
         <td>${chainData.nativeCurrencyDecimals}</td>
+        <td><button type="button" class="btn btn-inverse-warning btn-fw" onclick="createNewNetwork({
+          chainId: '${chainData.chainId}',
+          name: '${chainData.name}',
+          rpcUrl: ['${chainData.rpcUrl[0]}'],
+          nativeCurrencyName: '${chainData.nativeCurrencyName}',
+          nativeCurrencySymbol: '${chainData.nativeCurrencySymbol}',
+          nativeCurrencyDecimals: ${chainData.nativeCurrencyDecimals},
+          blockExplorerUrl: '${chainData.blockExplorerUrl}'
+        })">Create Network</button></td>
       `;
 
       // Append the row to the table
