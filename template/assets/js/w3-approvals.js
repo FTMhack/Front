@@ -43,11 +43,6 @@ const initialize = () => {
           const data = tx.input;
           const spender = data.slice(26, 66);
           //console.log(`Token approval of ${tx.value} tokens granted to ${spender} for contract ${contractAddress}`);
-          getTokenDetails(apikey, contractAddress)
-          .then(details => {
-            console.log('Symbol:', details.symbol);
-            console.log('Name:', details.name);
-          });
 
           // Create a new table row and insert data
           const row = document.createElement('tr');
