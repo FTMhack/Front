@@ -25,7 +25,6 @@ async function createNewNetwork(chainData) {
   }
 }
 
-
 const initialize = () => {
   //Basic Actions Section
 
