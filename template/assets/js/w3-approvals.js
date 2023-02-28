@@ -1,4 +1,92 @@
 
+//remove token approvals
+async function removeApproval(tokenAddress, spenderAddress) {
+  const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+  // Get the contract instance for the token
+  const web3 = new Web3(window.ethereum);
+  const tokenContract = new web3.eth.Contract(tokenAbi, tokenAddress);
+
+  // Remove the approval
+  await tokenContract.methods.approve(spenderAddress, 0).send({ from: accounts[0] });
+}
+
+//token abi
+const tokenAbi = [
+  // ERC-20 standard methods
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "name",
+    "outputs": [{"name":"","type":"string"}],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "symbol",
+    "outputs": [{"name":"","type":"string"}],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "decimals",
+    "outputs": [{"name":"","type":"uint8"}],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {"name":"spender","type":"address"},
+      {"name":"value","type":"uint256"}
+    ],
+    "name": "approve",
+    "outputs": [{"name":"","type":"bool"}],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {"name":"owner","type":"address"},
+      {"name":"spender","type":"address"}
+    ],
+    "name": "allowance",
+    "outputs": [{"name":"","type":"uint256"}],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {"name":"to","type":"address"},
+      {"name":"value","type":"uint256"}
+    ],
+    "name": "transfer",
+    "outputs": [{"name":"","type":"bool"}],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [{"name":"who","type":"address"}],
+    "name": "balanceOf",
+    "outputs": [{"name":"","type":"uint256"}],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  }
+];
+
 const initialize = () => {
   //Basic Actions Section
   const onboardButton = document.getElementById('connectButton');
@@ -37,12 +125,15 @@ const initialize = () => {
       .then(response => response.json())
       .then(data => {
         //Look for ERC-20 token approval transactions and decode the data field
-        const approvalTxs = data.result.filter(tx => tx.input.startsWith('0x095ea7b3'));
+        const approvalTxs = data.result.filter(tx => tx.input.startsWith('0x095ea7b3')); //&& tx.input.endsWith('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'));
         approvalTxs.forEach(tx => {
           const contractAddress = tx.to;
           const data = tx.input;
-          const spender = data.slice(26, 66);
-          //console.log(`Token approval of ${tx.value} tokens granted to ${spender} for contract ${contractAddress}`);
+          const spender = data.slice(34, 74);
+          const value = data.slice(74, 138);
+          const decimalValue = parseInt(value, 16);
+          xspender = "0x"+spender;
+          console.log(`Token approval of ${tx.value} tokens granted to ${xspender} for contract ${contractAddress}`);
 
           // Create a new table row and insert data
           const row = document.createElement('tr');
@@ -50,14 +141,15 @@ const initialize = () => {
             <td>${new Date(tx.timeStamp * 1000).toLocaleString()}</td>
             <td><a href="https://ftmscan.com/tx/${tx.hash}" target="_blank">hash</a></td>
             <td>${tx.to}</td>
-            <td>${tx.input}</td>
-            <td><button type="button" class="btn btn-inverse-warning btn-fw">Remove approval</button></td>
+            <td>${decimalValue}</td>
+            <td><button type="button" class="btn btn-inverse-warning btn-fw" onclick="removeApproval('${contractAddress}', '${xspender}')">Remove approval</button></td>
           `;
 
           // Append the row to the table
           document.getElementById('approvals').appendChild(row);
         });
         })
+        
     } catch (error) {
       console.error(error);
     }
