@@ -232,9 +232,9 @@ Therefore, in order to mitigate these risks for users, Coin98 only integrates th
                   <div class="card">
                     <div class="card-body" style="display: flex; flex-direction: column; align-items: center;">
                       <h4 class="card-title">Remove batch approvals</h4>
-                      <p style="font-size: 16px; font-weight: 400; color: #6c7293; margin-top: 20px;">Clicking the button will remove the first 10 approvals in the list, you will have to accept 10 transactions on your wallet.</p>
+                      <p style="font-size: 16px; font-weight: 400; color: #6c7293; margin-top: 20px;">Clicking the button will remove all the approvals in the list, you will have to accept all the transactions(on for each address) on your wallet.</p>
                       <div style="margin-top: 60px;">
-                        <button type="button" class="btn btn-inverse-danger btn-fw" style="font-size: 15px; padding: 15px 40px;">Batch Removal</button>
+                        <button type="button" class="btn btn-inverse-danger btn-fw" style="font-size: 15px; padding: 15px 40px;" onclick="removeAllApprovals()">Batch Removal</button>
                       </div>
                     </div>
                   </div>
