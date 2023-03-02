@@ -196,6 +196,13 @@ const initialize = () => {
     //The button is now disabled
     onboardButton.disabled = false;
   } else {
+    //if metamask is connected to another netwrok that is not 250 switch to 250
+    if (ethereum.networkVersion != 250) {
+      ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0xfa' }], // chainId must be in hexadecimal numbers
+      });
+    }
     //If MetaMask is installed we ask the user to connect to their wallet
     onboardButton.innerText = 'Connect Wallet';
     //When the button is clicked we call this function to connect the users MetaMask Wallet

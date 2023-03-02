@@ -88,11 +88,6 @@ const initialize = () => {
     const { ethereum } = window;
     return Boolean(ethereum && ethereum.isMetaMask);
   };
-  const isMetaMaskInstalledRpc = () => {
-    //Have to check the ethereum binding on the window object to see if it's installed
-    const { ethereum } = window;
-    return Boolean(ethereum && ethereum.isMetaMask);
-  };
 
   const onClickConnect = async () => {
     try {
@@ -107,8 +102,70 @@ const initialize = () => {
       getAccountsButton.remove();
       Disconnect.innerHTML = '<p style="font-size: 12px; font-weight: 400; color: #6c7293; margin-top: 20px;">You are connected to your wallet</p>';
       
-      // Log the array of transactions to the console
+      // extract all the smart contract dapps address that have interacted with the wallet
+        Moralis.start({
+          apiKey: 'jLi9qnff5zpDilqiq1zGxEJsDG8808RHaYRhVjr2Ice5b8cjfHESCtUx3ZvLtP5q'
+        });
 
+        async function getWalletTransactions(walletAddress) {
+          const options = {
+            chain: '0xfa',
+            address: walletAddress,
+          };
+
+          const transactions = await Moralis.EvmApi.transaction.getWalletTransactionsVerbose(options);
+          console.log(transactions);
+          return transactions;
+        }
+
+        getWalletTransactions(account).then((transactions) => {
+          // Filter transactions with non-empty logs
+            const filteredTransactions = transactions.result.filter(
+              (transaction) => transaction.logs.length != 0
+            );
+
+            const transactionData = [];
+            const seenToAddresses = new Set();
+            filteredTransactions.forEach((txWithLog) => {
+              const toAddress = txWithLog._data.to._value;
+              if (!seenToAddresses.has(toAddress)) {
+                transactionData.push({
+                  toAddress,
+                  timeStamp: txWithLog._data.blockTimestamp,
+                  gasUsed: txWithLog._data.cumulativeGasUsed.value,
+                  hash: txWithLog._data.hash
+                });
+                seenToAddresses.add(toAddress);
+              }
+            });
+          
+            // Log the array of objects as a table
+            console.table(transactionData);
+              // Create a new row for each transaction and append it to the Approvals table
+              const approvalsTable = document.getElementById('Approvals');
+              transactionData.forEach((txData) => {
+                const newRow = approvalsTable.insertRow();
+                newRow.insertCell().innerText = txData.toAddress;
+                const hashCell = newRow.insertCell();
+                const hashLink = document.createElement('a');
+                hashLink.href = `https://ftmscan.com/tx/${txData.hash}`;
+                hashLink.target = '_blank';
+                hashLink.rel = 'noopener noreferrer';
+                hashLink.innerText = "hash";
+                hashCell.appendChild(hashLink);
+                const formattedTimeStamp = new Date(txData.timeStamp).toLocaleString('en-US', {
+                  month: 'numeric',
+                  day: 'numeric',
+                  year: 'numeric',
+                  hour: 'numeric',
+                  minute: 'numeric',
+                  hour12: false
+                });
+                newRow.insertCell().innerText = formattedTimeStamp;
+                newRow.insertCell().innerText = txData.gasUsed;
+                newRow.insertCell().innerText = 'Low'; // or 'High' depending on the risk level
+              });
+          });
     } catch (error) {
       console.error(error);
     }
@@ -124,12 +181,20 @@ const initialize = () => {
     //The button is now disabled
     onboardButton.disabled = false;
   } else {
+    //if metamask is connected to another netwrok that is not 250 switch to 250
+    if (ethereum.networkVersion != 250) {
+      ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0xfa' }], // chainId must be in hexadecimal numbers
+      });
+    }
     //If MetaMask is installed we ask the user to connect to their wallet
     onboardButton.innerText = 'Connect Wallet';
     //When the button is clicked we call this function to connect the users MetaMask Wallet
     onboardButton.onclick = onClickConnect;
     //The button is now disabled
     onboardButton.disabled = false;
+    
   }
   };
 
