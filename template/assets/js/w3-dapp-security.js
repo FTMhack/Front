@@ -141,7 +141,7 @@ const initialize = () => {
           
             // Log the array of objects as a table
             console.table(transactionData);
-              // Create a new row for each transaction and append it to the Approvals table
+              // Create table
               const approvalsTable = document.getElementById('Approvals');
               transactionData.forEach((txData) => {
                 const newRow = approvalsTable.insertRow();
@@ -163,7 +163,7 @@ const initialize = () => {
                 });
                 newRow.insertCell().innerText = formattedTimeStamp;
                 newRow.insertCell().innerText = txData.gasUsed;
-                newRow.insertCell().innerText = 'Low'; // or 'High' depending on the risk level
+                newRow.insertCell().innerText = 'Low'; // add the function that calls marco's api
               });
           });
     } catch (error) {
