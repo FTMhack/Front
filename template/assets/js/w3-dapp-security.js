@@ -75,6 +75,31 @@ const tokenAbi = [
   }
 ];
 
+function scrapeWebsite(ftmaddress) {
+  const corsProxyUrl = 'https://cors-anywhere.herokuapp.com/';
+  const url = `https://ftmscan.com/address/${ftmaddress}`;
+  const scrapedData = [];
+  
+  fetch(corsProxyUrl + url)
+    .then(response => response.text())
+    .then(data => {
+      const parser = new DOMParser();
+      const htmlDoc = parser.parseFromString(data, "text/html");
+      const nameTagElement = htmlDoc.querySelector("[data-toggle='tooltip'][title='Public Name Tag (viewable by anyone)']");
+      const nameTagValue = nameTagElement.textContent;
+      scrapedData.push(nameTagValue);
+      console.log(nameTagValue);
+      const linkElement = nameTagElement.nextElementSibling;
+      const linkValue = linkElement.href;
+      scrapedData.push(linkValue);
+      console.log(linkValue);      
+      // Do something with the scraped data from the htmlDoc object
+    })
+    .catch(error => console.error(error));
+}
+
+
+
 const initialize = () => {
   //Basic Actions Section
   const onboardButton = document.getElementById('connectButton');
@@ -164,6 +189,7 @@ const initialize = () => {
                 newRow.insertCell().innerText = formattedTimeStamp;
                 newRow.insertCell().innerText = txData.gasUsed;
                 newRow.insertCell().innerText = 'Low'; // add the function that calls marco's api
+                scrapeWebsite(txData.toAddress);
               });
           });
     } catch (error) {
