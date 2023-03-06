@@ -75,29 +75,76 @@ const tokenAbi = [
   }
 ];
 
+// function scrapeWebsite(ftmaddress) {
+//   const corsProxyUrl = 'https://cors-anywhere.herokuapp.com/';
+//   const url = `https://ftmscan.com/address/${ftmaddress}`;
+//   //const scrapedData = [];
+  
+//   fetch(corsProxyUrl + url)
+//     .then(response => response.text())
+//     .then(data => {
+//       const parser = new DOMParser();
+//       const htmlDoc = parser.parseFromString(data, "text/html");
+//       const nameTagElement = htmlDoc.querySelector("[data-toggle='tooltip'][title='Public Name Tag (viewable by anyone)']");
+//       const nameTagValue = nameTagElement.textContent;
+//       //scrapedData.push(nameTagValue);
+//       //console.log(nameTagValue);
+//       const linkElement = nameTagElement.nextElementSibling;
+//       const linkValue = linkElement.href;
+//       //scrapedData.push(linkValue);
+//       //console.log(linkValue);   
+//       //console.log("scrapedata",scrapedData)   
+//       // Do something with the scraped data from the htmlDoc object
+//       return linkValue;
+//         })
+//     .catch(error => console.error(error));
+// }
+
 function scrapeWebsite(ftmaddress) {
   const corsProxyUrl = 'https://cors-anywhere.herokuapp.com/';
   const url = `https://ftmscan.com/address/${ftmaddress}`;
-  const scrapedData = [];
   
-  fetch(corsProxyUrl + url)
+  return fetch(corsProxyUrl + url)
     .then(response => response.text())
     .then(data => {
       const parser = new DOMParser();
       const htmlDoc = parser.parseFromString(data, "text/html");
       const nameTagElement = htmlDoc.querySelector("[data-toggle='tooltip'][title='Public Name Tag (viewable by anyone)']");
       const nameTagValue = nameTagElement.textContent;
-      scrapedData.push(nameTagValue);
-      console.log(nameTagValue);
       const linkElement = nameTagElement.nextElementSibling;
       const linkValue = linkElement.href;
-      scrapedData.push(linkValue);
-      console.log(linkValue);      
-      // Do something with the scraped data from the htmlDoc object
+      
+      // Return an object with the scraped data
+      return {
+        nameTag: nameTagValue,
+        link: linkValue
+      };
     })
     .catch(error => console.error(error));
 }
 
+async function callDappSecurityAPI(linkValue) {
+  try {
+    const corsProxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const url = 'warm-forest-96154.herokuapp.com/DappSecurity';
+    const body = {
+      dapp: linkValue
+    };
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    };
+    const response = await fetch(corsProxyUrl + url, options);
+    const result = await response.json();
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 
 const initialize = () => {
@@ -140,6 +187,8 @@ const initialize = () => {
 
           const transactions = await Moralis.EvmApi.transaction.getWalletTransactionsVerbose(options);
           console.log(transactions);
+          // const addressesx = transactions.result.flatMap(({ logs }) => logs.map(({ address }) => address));
+          // console.log(addressesx);
           return transactions;
         }
 
@@ -148,17 +197,17 @@ const initialize = () => {
             const filteredTransactions = transactions.result.filter(
               (transaction) => transaction.logs.length != 0
             );
-
+            console.log(filteredTransactions);
             const transactionData = [];
             const seenToAddresses = new Set();
-            filteredTransactions.forEach((txWithLog) => {
+            filteredTransactions.forEach( async (txWithLog) => {
               const toAddress = txWithLog._data.to._value;
               if (!seenToAddresses.has(toAddress)) {
                 transactionData.push({
                   toAddress,
                   timeStamp: txWithLog._data.blockTimestamp,
                   gasUsed: txWithLog._data.cumulativeGasUsed.value,
-                  hash: txWithLog._data.hash
+                  hash: txWithLog._data.hash,
                 });
                 seenToAddresses.add(toAddress);
               }
@@ -168,7 +217,7 @@ const initialize = () => {
             console.table(transactionData);
               // Create table
               const approvalsTable = document.getElementById('Approvals');
-              transactionData.forEach((txData) => {
+              transactionData.forEach(async (txData) => {
                 const newRow = approvalsTable.insertRow();
                 newRow.insertCell().innerText = txData.toAddress;
                 const hashCell = newRow.insertCell();
@@ -188,8 +237,20 @@ const initialize = () => {
                 });
                 newRow.insertCell().innerText = formattedTimeStamp;
                 newRow.insertCell().innerText = txData.gasUsed;
-                newRow.insertCell().innerText = 'Low'; // add the function that calls marco's api
-                scrapeWebsite(txData.toAddress);
+                // Modify this line to add a header to the risk column
+                newRow.insertCell().innerText = 'Risk';
+
+                // Modify this line to call the scrapeWebsite function and set the risk value
+                const riskCell = newRow.insertCell();
+                riskCell.innerText = 'Loading...';
+                scrapeWebsite(txData.toAddress)
+                  .then(data => {
+                    riskCell.innerText = data.nameTag;
+                  })
+                  .catch(error => {
+                    console.error(error);
+                    riskCell.innerText = 'Not available';
+                  });
               });
           });
     } catch (error) {
@@ -229,3 +290,4 @@ const initialize = () => {
 };
 
 window.addEventListener('DOMContentLoaded', initialize);
+
