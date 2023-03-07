@@ -75,6 +75,42 @@ const tokenAbi = [
   }
 ];
 
+function displayExplanation(json) {
+  const risks = [];
+  for (const key in json) {
+  if (json[key].is_open_source === "0") {
+    risks.push({ 
+      Value: 'Not open source',
+      Explaination: "Un-open-sourced contracts may hide various unknown mechanisms and are extremely risky. When the contract is not open source, we will not be able to detect other risk items.",
+    });
+    console.log(risks);
+  }
+  if (json[key].malicious_contract === "1") {
+    risks.push( {
+      Value: 'Malicious contract',
+      Explaination: "describes whether the contract is a suspected malicious. Does not mean the address is completely safe. Maybe we just haven't found its malicious behavior.",
+    });
+    console.log(risks);
+  }
+
+  if (json[key].is_audit === "0") {
+    risks.push( {
+      Value: 'no audit found',
+      Explaination: "does not mean the dApp was not audited. Maybe we just haven't found audit information for this dApp yet.",
+    });
+    console.log(risks);
+  }
+  if (json[key].trust_list === "0") {
+    risks.push( {
+        Value: 'Not in trust list',
+        Explaination: "It describes whether the dapp is a famous and trustworthy one.",
+      }); 
+      console.log(risks);
+   }
+  }
+  return risks;
+}
+
 function scrapeWebsite(ftmaddress) {
   const corsProxyUrl = 'https://cors-anywhere.herokuapp.com/';
   const url = `https://ftmscan.com/address/${ftmaddress}`;
@@ -215,16 +251,19 @@ const initialize = () => {
                 riskCell.innerText = 'Loading...';
                 const nameCell = newRow.insertCell();
                 nameCell.innerText = 'Loading...';
-                try {
-                  const scrapedData = await scrapeWebsite(txData.toAddress);
-                  nameCell.innerText = scrapedData.nameTag;
-                  const riskLevel = await callDappSecurityAPI(scrapedData.link);
-                  riskCell.innerText = riskLevel;
-                } catch (error) {
+                   try {
+                    const scrapedData = await scrapeWebsite(txData.toAddress);
+                    nameCell.innerText = scrapedData.nameTag;
+                    const riskLevel = await callDappSecurityAPI(scrapedData.link);
+                    console.log(riskLevel);
+                    riskCell.innerText = riskLevel;
+                    // const risk = await displayExplanation(riskLevel)
+                    // console.log("risklevels",risk);
+                  } catch (error) {
                   console.error(error);
-                  nameCell.innerText = 'Not available';
-                  riskCell.innerText = 'Not available';
-                }
+                    nameCell.innerText = 'Not available';
+                    riskCell.innerText = 'Not available';
+                  }
               });
           });
     } catch (error) {
