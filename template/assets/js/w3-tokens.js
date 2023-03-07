@@ -74,7 +74,6 @@ const tokenAbi = [
     "type": "function"
   }
 ];
-
 function scrapeWebsite(ftmaddress) {
   const corsProxyUrl = 'https://cors-anywhere.herokuapp.com/';
   const url = `https://ftmscan.com/address/${ftmaddress}`;
