@@ -74,33 +74,12 @@ const tokenAbi = [
     "type": "function"
   }
 ];
-function scrapeWebsite(ftmaddress) {
-  const corsProxyUrl = 'https://cors-anywhere.herokuapp.com/';
-  const url = `https://ftmscan.com/address/${ftmaddress}`;
-  
-  return fetch(corsProxyUrl + url)
-    .then(response => response.text())
-    .then(data => {
-      const parser = new DOMParser();
-      const htmlDoc = parser.parseFromString(data, "text/html");
-      const nameTagElement = htmlDoc.querySelector("[data-toggle='tooltip'][title='Public Name Tag (viewable by anyone)']");
-      const nameTagValue = nameTagElement.textContent;
-      const linkElement = nameTagElement.nextElementSibling;
-      const linkValue = linkElement.href;
-      //console.log("scrapedata",nameTagValue,linkValue ) 
-      // Return an object with the scraped data
-      return {
-        nameTag: nameTagValue,
-        link: linkValue
-      };
-    })
-    .catch(error => console.error(error));
-}
+
 // call marco's API
 async function callDappSecurityAPI(linkValue) {
   try {
     const corsProxyUrl = 'https://cors-anywhere.herokuapp.com/';
-    const url = 'warm-forest-96154.herokuapp.com/DappSecurity';
+    const url = 'warm-forest-96154.herokuapp.com/tokenSecurity';
     const body = {
       dapp: linkValue
     };
@@ -152,76 +131,55 @@ const initialize = () => {
           apiKey: 'jLi9qnff5zpDilqiq1zGxEJsDG8808RHaYRhVjr2Ice5b8cjfHESCtUx3ZvLtP5q'
         });
 
-        async function getWalletTransactions(walletAddress) {
+        async function getWalletTokens(walletAddress) {
           const options = {
-            chain: '0xfa',
             address: walletAddress,
+            chain: '0xfa',
           };
 
-          const transactions = await Moralis.EvmApi.transaction.getWalletTransactionsVerbose(options);
-          console.log(transactions);
-          // const addressesx = transactions.result.flatMap(({ logs }) => logs.map(({ address }) => address));
-          // console.log(addressesx);
+          const transactions = await Moralis.EvmApi.token.getWalletTokenBalances(options);
+          //console.log(transactions);
           return transactions;
         }
-
-        getWalletTransactions(account).then((transactions) => {
+        getWalletTokens(account).then((transactions) => {
           // Filter transactions with non-empty logs
-            const filteredTransactions = transactions.result.filter(
-              (transaction) => transaction.logs.length != 0
-            );
-            console.log(filteredTransactions);
+            const filteredTransactions = transactions.result
+            //console.log("filtered",filteredTransactions);
             const transactionData = [];
             const seenToAddresses = new Set();
-            filteredTransactions.forEach( async (txWithLog) => {
-              const toAddress = txWithLog._data.to._value;
+            filteredTransactions.forEach( async (tx) => {
+              const toAddress = tx._token._value.contractAddress._value;
+              //console.log("toAddress",toAddress);
               if (!seenToAddresses.has(toAddress)) {
                 transactionData.push({
-                  toAddress,
-                  timeStamp: txWithLog._data.blockTimestamp,
-                  gasUsed: txWithLog._data.cumulativeGasUsed.value,
-                  hash: txWithLog._data.hash,
+                  Address: toAddress,
+                  Symbol: tx._token._value.symbol,
+                  Name: tx._token._value.name,
+                  Decimals: tx._token._value.decimals,
+                  Value: tx._value.amount.value,
                 });
                 seenToAddresses.add(toAddress);
               }
             });
           
             // Log the array of objects as a table
-            console.table(transactionData);
+            console.table("thxdataend",transactionData);
               // Create table
               const approvalsTable = document.getElementById('Approvals');
               transactionData.forEach(async (txData) => {
                 const newRow = approvalsTable.insertRow();
-                newRow.insertCell().innerText = txData.toAddress;
-                const hashCell = newRow.insertCell();
-                const hashLink = document.createElement('a');
-                hashLink.href = `https://ftmscan.com/tx/${txData.hash}`;
-                hashLink.target = '_blank';
-                hashLink.rel = 'noopener noreferrer';
-                hashLink.innerText = "hash";
-                hashCell.appendChild(hashLink);
-                const formattedTimeStamp = new Date(txData.timeStamp).toLocaleString('en-US', {
-                  month: 'numeric',
-                  day: 'numeric',
-                  year: 'numeric',
-                  hour: 'numeric',
-                  minute: 'numeric',
-                  hour12: false
-                });
-                newRow.insertCell().innerText = formattedTimeStamp;
-                newRow.insertCell().innerText = txData.gasUsed;
+                newRow.insertCell().innerText = txData.Address;
+                newRow.insertCell().innerText = txData.Symbol;
+                newRow.insertCell().innerText = txData.Name;
+                //newRow.insertCell().innerText = Number(txData.Value / BigInt(10 ** txData.Decimals));;
+                newRow.insertCell().innerText = (txData.Value / BigInt(10 ** txData.Decimals)); 
                 const riskCell = newRow.insertCell();
                 riskCell.innerText = 'Loading...';
-                const nameCell = newRow.insertCell();
-                nameCell.innerText = 'Loading...';
                 try {
-                  const scrapedData = await scrapeWebsite(txData.toAddress);
-                  nameCell.innerText = scrapedData.nameTag;
-                  const riskLevel = await callDappSecurityAPI(scrapedData.link);
+                  const riskLevel = await callDappSecurityAPI(txData.Address);
                   riskCell.innerText = riskLevel;
                 } catch (error) {
                   console.error(error);
-                  nameCell.innerText = 'Not available';
                   riskCell.innerText = 'Not available';
                 }
               });
