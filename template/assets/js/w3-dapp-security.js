@@ -260,14 +260,14 @@ const initialize = () => {
             const json = JSON.stringify(riskLevel.contracts_security[0].contracts);
             //create a table from json array
             const table = document.createElement('table');
-            table.setAttribute('class', 'table table-striped table-bordered');
+            table.setAttribute('class', 'table table-bordered');
             const thead = document.createElement('thead');
             const tbody = document.createElement('tbody');
             const tr = document.createElement('tr');
             const th1 = document.createElement('th');
-            th1.innerHTML = 'creator';
+            th1.innerHTML = 'malicious_creator';
             const th2 = document.createElement('th');
-            th2.innerHTML = 'contract';
+            th2.innerHTML = 'malicious_contract';
             const th3 = document.createElement('th');
             th3.innerHTML = 'openSource';
             tr.appendChild(th1);
