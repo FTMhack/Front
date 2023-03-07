@@ -113,7 +113,7 @@ function scrapeWebsite(ftmaddress) {
       const nameTagValue = nameTagElement.textContent;
       const linkElement = nameTagElement.nextElementSibling;
       const linkValue = linkElement.href;
-      
+      //console.log("scrapedata",nameTagValue,linkValue ) 
       // Return an object with the scraped data
       return {
         nameTag: nameTagValue,
@@ -122,7 +122,7 @@ function scrapeWebsite(ftmaddress) {
     })
     .catch(error => console.error(error));
 }
-
+// call marco's API
 async function callDappSecurityAPI(linkValue) {
   try {
     const corsProxyUrl = 'https://cors-anywhere.herokuapp.com/';
@@ -137,7 +137,8 @@ async function callDappSecurityAPI(linkValue) {
       },
       body: JSON.stringify(body)
     };
-    const response = await fetch(corsProxyUrl + url, options);
+    const response = await fetch((corsProxyUrl + url), options);
+    console.log(response)
     const result = await response.json();
     console.log(result);
     return result;
@@ -145,8 +146,6 @@ async function callDappSecurityAPI(linkValue) {
     console.error(error);
   }
 }
-
-
 const initialize = () => {
   //Basic Actions Section
   const onboardButton = document.getElementById('connectButton');
@@ -237,20 +236,20 @@ const initialize = () => {
                 });
                 newRow.insertCell().innerText = formattedTimeStamp;
                 newRow.insertCell().innerText = txData.gasUsed;
-                // Modify this line to add a header to the risk column
-                newRow.insertCell().innerText = 'Risk';
-
-                // Modify this line to call the scrapeWebsite function and set the risk value
                 const riskCell = newRow.insertCell();
                 riskCell.innerText = 'Loading...';
-                scrapeWebsite(txData.toAddress)
-                  .then(data => {
-                    riskCell.innerText = data.nameTag;
-                  })
-                  .catch(error => {
-                    console.error(error);
-                    riskCell.innerText = 'Not available';
-                  });
+                const nameCell = newRow.insertCell();
+                nameCell.innerText = 'Loading...';
+                try {
+                  const scrapedData = await scrapeWebsite(txData.toAddress);
+                  nameCell.innerText = scrapedData.nameTag;
+                  const riskLevel = await callDappSecurityAPI(scrapedData.link);
+                  riskCell.innerText = riskLevel;
+                } catch (error) {
+                  console.error(error);
+                  nameCell.innerText = 'Not available';
+                  riskCell.innerText = 'Not available';
+                }
               });
           });
     } catch (error) {
