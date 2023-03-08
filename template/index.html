@@ -4,7 +4,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Corona Admin</title>
+    <title>WalletInspector</title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
@@ -39,7 +39,7 @@
                   <span class="count bg-success"></span>
                 </div>
                 <div class="profile-name">
-                  <h5 class="mb-0 font-weight-normal" style="max-width: 65px; font-size: 16px; font-weight: 400; color: #6c7293;">Not connected</h5>
+                  <h5 class="mb-0 font-weight-normal" id="walletAddress_index" style="max-width: 65px; font-size: 16px; font-weight: 400; color: #6c7293;">Not connected</h5>
                 </div>
               </div>
             </div>
@@ -127,8 +127,8 @@
             <ul class="navbar-nav w-100">
             </ul>
             <ul class="navbar-nav navbar-nav-right">
-              <li class="nav-item dropdown d-none d-lg-block">
-                <a class="nav-link btn btn-success create-new-button" id="connect-button">Connect Wallet</a>
+              <li class="nav-item dropdown d-none d-lg-block" id="disconnect_index">
+                <a class="nav-link btn btn-success create-new-button" id="connectButton_index">Connect Wallet</a>
               </li>
               <li class="nav-item dropdown border-left">
               </li>
@@ -181,11 +181,11 @@
                             </div>
                             <div class="preview-item-content d-sm-flex flex-grow">
                               <div class="flex-grow">
-                                <h6 class="preview-subject">You have X infinite approvals </h6>
+                                <h6 class="preview-subject">You have 0 infinite approvals </h6>
                                 <p class="text-muted mb-0">a contract can spend infinite of the coin you approved</p>
                               </div>
                               <div class="me-auto text-sm-right pt-2 pt-sm-0">
-                                <button type="button" class="btn btn-outline-success btn-fw">Improve</button>
+                                <button type="button" class="btn btn-outline-success btn-fw">Check</button>
                               </div>
                             </div>
                           </div>
@@ -197,11 +197,11 @@
                             </div>
                             <div class="preview-item-content d-sm-flex flex-grow">
                               <div class="flex-grow">
-                                <h6 class="preview-subject">You have X Interaction with unsecure/malicious Dapps</h6>
+                                <h6 class="preview-subject">You have 2 Interaction with unsecure/malicious Dapps</h6>
                                 <p class="text-muted mb-0">A malicious/unsecured contract can possibly drain all your funds</p>
                               </div>
                               <div class="me-auto text-sm-right pt-2 pt-sm-0">
-                                <button type="button" class="btn btn-outline-success btn-fw">Improve</button>
+                                <button type="button" class="btn btn-outline-success btn-fw">Check</button>
                               </div>
                             </div>
                           </div>
@@ -213,11 +213,11 @@
                             </div>
                             <div class="preview-item-content d-sm-flex flex-grow">
                               <div class="flex-grow">
-                                <h6 class="preview-subject">You have X compromised/unsecured RPCs configured in your wallet</h6>
+                                <h6 class="preview-subject">Check your RPC configuration</h6>
                                 <p class="text-muted mb-0">Unsecure/compromised RPC could potentially modify or intercept your data, leading to the theft of sensitive information</p>
                               </div>
                               <div class="me-auto text-sm-right pt-2 pt-sm-0">
-                                <button type="button" class="btn btn-outline-success btn-fw">Improve</button>
+                                <button type="button" class="btn btn-outline-success btn-fw">Check</button>
                               </div>
                             </div>
                           </div>
@@ -229,11 +229,11 @@
                             </div>
                             <div class="preview-item-content d-sm-flex flex-grow">
                               <div class="flex-grow">
-                                <h6 class="preview-subject">You have X token with low reputation</h6>
+                                <h6 class="preview-subject">You have 1 token with low reputation</h6>
                                 <p class="text-muted mb-0">Low reputation tokens can potentially be scams or have security vulnerabilities.</p>
                               </div>
                               <div class="me-auto text-sm-right pt-2 pt-sm-0">
-                                <button type="button" class="btn btn-outline-success btn-fw">Improve</button>
+                                <button type="button" class="btn btn-outline-success btn-fw">Check</button>
                               </div>
                             </div>
                           </div>
@@ -245,21 +245,21 @@
                             </div>
                             <div class="preview-item-content d-sm-flex flex-grow">
                               <div class="flex-grow">
-                                <h6 class="preview-subject">You interacted with X compromised/malicious addresses</h6>
+                                <h6 class="preview-subject">You interacted with 0 compromised/malicious addresses</h6>
                                 <p class="text-muted mb-0">This contracts have been reported as possible: honeypot, phishing, or other risky stuff</p>
                               </div>
                               <div class="me-auto text-sm-right pt-2 pt-sm-0">
-                                <button type="button" class="btn btn-outline-success btn-fw">Improve</button>
+                                <button type="button" class="btn btn-outline-success btn-fw">Check</button>
                               </div>
                             </div>
                           </div>
-                          <div class="preview-item border-bottom">
+                          <!-- <div class="preview-item border-bottom">
                             <div class="preview-thumbnail">
                               <div class="preview-icon bg-secondary">
                                 <i class="mdi mdi-texture"></i>
                               </div>
-                            </div>
-                            <div class="preview-item-content d-sm-flex flex-grow">
+                            </div> -->
+                            <!-- <div class="preview-item-content d-sm-flex flex-grow">
                               <div class="flex-grow">
                                 <h6 class="preview-subject">The social media of X tokens in your wallet have been compromised</h6>
                                 <p class="text-muted mb-0">This can result in various risks, such as phishing attacks, scamming, or the spread of false information </p>
@@ -284,7 +284,7 @@
                                 <button type="button" class="btn btn-outline-success btn-fw">Improve</button>
                               </div>
                             </div>
-                          </div>
+                          </div> -->
                         </div>
                       </div>
                     </div>
@@ -374,7 +374,6 @@
     </div>
     <!-- container-scroller -->
     <!-- plugins:js -->
-    <script src="assets/js/web3.js"></script>
     <script src="assets/vendors/js/vendor.bundle.base.js"></script>
     <!-- endinject -->
     <!-- Plugin js for this page -->
@@ -394,8 +393,7 @@
     <!-- endinject -->
     <!-- Custom js for this page -->
     <script src="assets/js/dashboard.js"></script>
-    <script src="assets/js/w3-approvals.js"></script>
-    <script src="assets/js/w3-rpc.js"></script>
+    <script src="assets/js/w3-index.js"></script>
     <!-- End custom js for this page -->
   </body>
 </html>

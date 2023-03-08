@@ -75,7 +75,7 @@ const tokenAbi = [
   }
 ];
 
-function displayExplanation(obj) {
+function displayExplanation_compromised(obj) {
   const risks = [];
   if (obj.honeypot_related_address == "1") {
     risks.push({
@@ -188,7 +188,7 @@ function scrapeWebsite(ftmaddress) {
     .catch(error => console.error(error));
 }
 // call marco's API
-async function callDappSecurityAPI(Value) {
+async function callDappSecurityAPI_compromised(Value) {
   try {
     const corsProxyUrl = 'https://';
     const url = 'warm-forest-96154.herokuapp.com/addressSecurity';
@@ -215,10 +215,10 @@ async function callDappSecurityAPI(Value) {
 }
 const initialize = () => {
   //Basic Actions Section
-  const onboardButton = document.getElementById('connectButton');
-  const getAccountsButton = document.getElementById('connectButton');
-  const getAccountsResult = document.getElementById('walletAddress');
-  const Disconnect = document.getElementById('disconnect');
+  const onboardButton = document.getElementById('connectButton_comp');
+  const getAccountsButton = document.getElementById('connectButton_comp');
+  const getAccountsResult = document.getElementById('walletAddress_comp');
+  const Disconnect = document.getElementById('disconnect_comp');
 
   //Created check function to see if the MetaMask extension is installed
   const isMetaMaskInstalled = () => {
@@ -245,7 +245,7 @@ const initialize = () => {
         apiKey: 'jLi9qnff5zpDilqiq1zGxEJsDG8808RHaYRhVjr2Ice5b8cjfHESCtUx3ZvLtP5q'
       });
 
-      async function getWalletTransactions(walletAddress) {
+      async function getWalletTransactions_comp(walletAddress) {
         const options = {
           chain: '0xfa',
           address: walletAddress,
@@ -258,7 +258,7 @@ const initialize = () => {
         return transactions;
       }
 
-      getWalletTransactions(account).then((transactions) => {
+      getWalletTransactions_comp(account).then((transactions) => {
         // Filter transactions with non-empty logs
         const filteredTransactions = transactions.result.filter(
           (transaction) => transaction.logs.length == 0
@@ -310,9 +310,9 @@ const initialize = () => {
           riskCell.innerText = 'Loading...';
             try {
              if (txData.toAddress = accounts[0]) {
-              const riskLevel = await callDappSecurityAPI(txData.fromAddress);
+              const riskLevel = await callDappSecurityAPI_compromised(txData.fromAddress);
               console.log("riskleve", riskLevel);
-              const expl = displayExplanation(riskLevel);
+              const expl = displayExplanation_compromised(riskLevel);
               console.log("explenation",expl);
               const riskDiv = document.createElement('div');
               riskDiv.className = 'risk-badges';
@@ -335,9 +335,9 @@ const initialize = () => {
               riskCell.innerHTML = '<td style="max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">' + riskDiv.outerHTML + '</td>';
              }
              elif (txData.fromAddress = accounts[0]); {
-               const riskLevel = await callDappSecurityAPI(txData.toAddress);
+               const riskLevel = await callDappSecurityAPI_compromised(txData.toAddress);
                console.log("riskleve", riskLevel);
-               const expl = displayExplanation(riskLevel);
+               const expl = displayExplanation_compromised(riskLevel);
                console.log("explenation",expl);
                const riskDiv = document.createElement('div');
                riskDiv.className = 'risk-badges';
