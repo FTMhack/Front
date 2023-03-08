@@ -77,48 +77,82 @@ const tokenAbi = [
 
 function displayExplanation(obj) {
   const risks = [];
-
-  if (obj.contracts_security?.[0]?.contracts) {
-    let isOpenSource = false;
-    let isMalicious = false;
-    let isMaliciouscreator = false;
-    for (const key in obj.contracts_security[0].contracts) {
-      const contract = obj.contracts_security[0].contracts[key];
-      if (contract.is_open_source == "0" && !isOpenSource) {
-        risks.push({
-          Value: 'Not open source',
-          Explanation: "Un-open-sourced contracts may hide various unknown mechanisms and are extremely risky. When the contract is not open source, we will not be able to detect other risk items.",
-        });
-        isOpenSource = true;
-      }
-      if (contract.malicious_contract == "1" && !isMalicious) {
-        risks.push({
-          Value: 'Malicious contract',
-          Explanation: "Describes whether the contract is a suspected malicious contract. Note that this does not mean the address is completely safe as there may be undiscovered malicious behavior.",
-        });
-        isMalicious = true;
-      }
-      if (contract.malicious_creator == "1" && !isMaliciouscreator) {
-        risks.push({
-          Value: 'Malicious creator',
-          Explanation: "describes whether the creator is a suspected malicious address.",
-        });
-        isMalicious = true;
-      }
-    }
-  }
-
-  if (obj.is_audit == "0") {
+  if (obj.honeypot_related_address == "1") {
     risks.push({
-      Value: 'No audit found',
-      Explanation: "No audit by a reputable audit firm. This does not mean that the dApp is malicious, but it is a risk factor that should be considered. Others audits may be found on the dApp's website.",
+      Value: 'Honeypot related',
+      Explanation: "mean the creators or owners of the honeypot tokens.This is a dangerous address if the address is ralated to honeypot tokens.",
     });
   }
-
-  if (obj.trust_list == "0") {
+  if (obj.phishing_activities == "1") {
     risks.push({
-      Value: 'Not in trust list',
-      Explanation: "This dApp is not in a list of famous and trustworthy ones. doesn't mean it is risky.",
+      Value: 'Phishing activities',
+      Explanation: "this address has implemented phishing activities.",
+    });
+  }
+  if (obj.blackmail_activities == "1") {
+    risks.push({
+      Value: 'Blachmail activities',
+      Explanation: "this address has implemented blackmail activities.",
+    });
+  }
+  if (obj.stealing_attack == "1") {
+    risks.push({
+      Value: 'Stealing attack',
+      Explanation: "this address has implemented stealing attacks.",
+    });
+  }
+  if (obj.fake_kyc == "1") {
+    risks.push({
+      Value: 'Fake KYC',
+      Explanation: "this address is involved in fake KYC.",
+    });
+  }
+  if (obj.malicious_mining_activities == "1") {
+    risks.push({
+      Value: 'Malicious mining activities',
+      Explanation: "this address is involved in malicious mining activities.",
+    });
+  }
+  if (obj.darkweb_transactions == "1") {
+    risks.push({
+      Value: 'Darkweb transactions',
+      Explanation: "this address is involved in darkweb transactions.",
+    });
+  }
+  if (obj.cybercrime == "1") {
+    risks.push({
+      Value: 'Cybercrime',
+      Explanation: "this address is involved in cybercrime.",
+    });
+  }
+  if (obj.money_laundering == "1") {
+    risks.push({
+      Value: 'Money laundering',
+      Explanation: "this address is involved in money laundering.",
+    });
+  }
+  if (obj.financial_crime == "1") {
+    risks.push({
+      Value: 'Financial crime',
+      Explanation: "this address is involved in financial crime.",
+    });
+  }
+  if (obj.blacklist_doubt == "1") {
+    risks.push({
+      Value: 'Blacklist doubt',
+      Explanation: "this address is suspected of malicious behavior.",
+    });
+  }
+  if (obj.mixer == "1") {
+    risks.push({
+      Value: 'Mixer',
+      Explanation: "this address is coin mixer address.",
+    });
+  }
+  if (obj.sanctioned == "1") {
+    risks.push({
+      Value: 'Sanctioned',
+      Explanation: "this address is sanctioned.",
     });
   }
   if (risks.length === 0) {
@@ -154,12 +188,13 @@ function scrapeWebsite(ftmaddress) {
     .catch(error => console.error(error));
 }
 // call marco's API
-async function callDappSecurityAPI(linkValue) {
+async function callDappSecurityAPI(Value) {
   try {
     const corsProxyUrl = 'https://';
-    const url = 'warm-forest-96154.herokuapp.com/DappSecurity';
+    const url = 'warm-forest-96154.herokuapp.com/addressSecurity';
     const body = {
-      dapp: linkValue
+      chain: "250",
+      address: Value,
     };
     const options = {
       method: 'POST',
@@ -168,6 +203,7 @@ async function callDappSecurityAPI(linkValue) {
       },
       body: JSON.stringify(body)
     };
+    console.log("addressasked", Value)
     const response = await fetch((corsProxyUrl + url), options);
     console.log(response)
     const result = await response.json();
@@ -272,32 +308,64 @@ const initialize = () => {
           newRow.insertCell().innerText = txData.gasUsed;
           const riskCell = newRow.insertCell();
           riskCell.innerText = 'Loading...';
-          const nameCell = newRow.insertCell();
-          nameCell.innerText = 'Loading...';
-          // try {
-          //   const scrapedData = await scrapeWebsite(txData.toAddress);
-          //   nameCell.innerText = scrapedData.nameTag;
-          //   const riskLevel = await callDappSecurityAPI(scrapedData.link);
-          //   console.log("riskleve", riskLevel);
-          //   const expl = displayExplanation(riskLevel);
-          //   console.log("explenation",expl);
-          //   const riskDiv = document.createElement('div');
-          //   riskDiv.className = 'risk-badges';
-          //   for (const riskLevel of expl) {
-          //     const badge = document.createElement('div');
-          //     badge.className = 'badge badge-outline-danger';
-          //     badge.textContent = riskLevel.Value;
-          //     badge.title = riskLevel.Explanation;
-          //     riskDiv.appendChild(badge);
-          //   }
-          //   riskCell.innerHTML = '<td style="max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">' + riskDiv.outerHTML + '</td>';
-          // } catch (error) {
+            try {
+             if (txData.toAddress = accounts[0]) {
+              const riskLevel = await callDappSecurityAPI(txData.fromAddress);
+              console.log("riskleve", riskLevel);
+              const expl = displayExplanation(riskLevel);
+              console.log("explenation",expl);
+              const riskDiv = document.createElement('div');
+              riskDiv.className = 'risk-badges';
+              for (const riskLevel of expl) {
+                if (riskLevel.Value === 'No risk identified') {
+                  const badge = document.createElement('div');
+                  badge.className = 'badge badge-outline-success';
+                  badge.textContent = riskLevel.Value;
+                  badge.title = riskLevel.Explanation;
+                  riskDiv.appendChild(badge);
+                 }
+                 else {
+                   const badge = document.createElement('div');
+                   badge.className = 'badge badge-outline-danger';
+                   badge.textContent = riskLevel.Value;
+                   badge.title = riskLevel.Explanation;
+                   riskDiv.appendChild(badge);
+                 }
+              }
+              riskCell.innerHTML = '<td style="max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">' + riskDiv.outerHTML + '</td>';
+             }
+             elif (txData.fromAddress = accounts[0]); {
+               const riskLevel = await callDappSecurityAPI(txData.toAddress);
+               console.log("riskleve", riskLevel);
+               const expl = displayExplanation(riskLevel);
+               console.log("explenation",expl);
+               const riskDiv = document.createElement('div');
+               riskDiv.className = 'risk-badges';
+               for (const riskLevel of expl) {
+                if (riskLevel.Value === 'No risk identified') {
+                 const badge = document.createElement('div');
+                 badge.className = 'badge badge-outline-success';
+                 badge.textContent = riskLevel.Value;
+                 badge.title = riskLevel.Explanation;
+                 riskDiv.appendChild(badge);
+                }
+                else {
+                  const badge = document.createElement('div');
+                  badge.className = 'badge badge-outline-danger';
+                  badge.textContent = riskLevel.Value;
+                  badge.title = riskLevel.Explanation;
+                  riskDiv.appendChild(badge);
+                }
+                
+               }
+               riskCell.innerHTML = '<td style="max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">' + riskDiv.outerHTML + '</td>';
+             }
+            } catch (error) {
           //   console.error(error);
           //   riskCell.innerText = 'Not available';
           //   if (nameCell.innerText === 'Loading...') {
           //     nameCell.innerText = 'Not available';
-          //   }
-          // }
+           }
         });
       });
     } catch (error) {
