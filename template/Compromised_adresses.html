@@ -39,7 +39,7 @@
                   <span class="count bg-success"></span>
                 </div>
                 <div class="profile-name">
-                  <h5 class="mb-0 font-weight-normal">0x00000..12</h5>
+                  <h5 class="mb-0 font-weight-normal" id="walletAddress">0x00000..12</h5>
                 </div>
               </div>
             </div>
@@ -88,23 +88,23 @@
             </a>
           </li> 
           <li class="nav-item menu-items">
-            <a class="nav-link" href="NFTs.html">
+            <a class="nav-link" href="">
               <span class="menu-icon">
                 <i class="mdi mdi-speedometer"></i>
               </span>
-              <span class="menu-title">NFTs</span>
+              <span class="menu-title">NFTs (TBD)</span>
             </a>
           </li> 
           <li class="nav-item menu-items">
-            <a class="nav-link" href="Social-media.html">
+            <a class="nav-link" href="">
               <span class="menu-icon">
                 <i class="mdi mdi-speedometer"></i>
               </span>
-              <span class="menu-title">Social media</span>
+              <span class="menu-title">Social media (TBD)</span>
             </a>
           </li> 
           <li class="nav-item menu-items">
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="Lowrep-tokens.html">
               <span class="menu-icon">
                 <i class="mdi mdi-speedometer"></i>
               </span>
@@ -127,8 +127,8 @@
             <ul class="navbar-nav w-100">
             </ul>
             <ul class="navbar-nav navbar-nav-right">
-              <li class="nav-item dropdown d-none d-lg-block">
-                <a class="nav-link btn btn-success create-new-button" id="createbuttonDropdown" data-bs-toggle="dropdown" aria-expanded="false" href="#">Connect Wallet</a>
+              <li class="nav-item dropdown d-none d-lg-block" id="disconnect">
+                <a class="nav-link btn btn-success create-new-button" id="connectButton" aria-expanded="false" >Connect Wallet</a>
               </li>
               <li class="nav-item dropdown border-left">
               </li>
@@ -150,7 +150,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-md-6 grid-margin stretch-card">
+              <div class="col-md-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
                     <div class="d-flex flex-row justify-content-between">
@@ -173,7 +173,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-6 grid-margin stretch-card">
+              <!-- <div class="col-md-6 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
                     <div class="d-flex flex-row justify-content-between">
@@ -186,7 +186,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
             <div class="row ">
               <div class="col-12 grid-margin">
@@ -208,42 +208,21 @@
               <div class="col-12 grid-margin">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="card-title">Your suspicious interactions</h4>
+                    <h4 class="card-title">Your last interactions</h4>
                     <div class="table-responsive">
                       <table class="table">
                         <thead>
                           <tr>
-                            <th> Address </th>
-                            <th> Type </th>
-                            <th> Date </th>
+                            <th> To Address </th>
+                            <th> From Address </th>
+                            <th> Hash </th>
+                            <th> Data </th>
+                            <th> Gas </th>
+                            <th> Risk </th>
+                            <th> Name </th>
                           </tr>
                         </thead>
-                        <tbody>
-                          <tr>
-                            <td>0x00000..12</td>
-                            <td><div class="badge badge-outline-danger">Cybercrime</div></td>
-                            <td>01/01/2023</td>
-                          </tr>
-                          <tr>
-                            <td>0x00000..12</td>
-                            <td><div class="badge badge-outline-danger">Fake KYC</div></td>
-                            <td>01/01/2023</td>
-                          </tr>
-                          <tr>
-                            <td>0x00000..12</td>
-                            <td><div class="badge badge-outline-danger">Blackmail</div></td>
-                            <td>01/01/2023</td>
-                          </tr>
-                          <tr>
-                            <td>0x00000..12</td>
-                            <td><div class="badge badge-outline-danger">phishing</div></td>
-                            <td>01/01/2023</td>
-                          </tr>
-                          <tr>
-                            <td>0x00000..12</td>
-                            <td><div class="badge badge-outline-danger">money laundering</div></td>
-                            <td>01/01/2023</td>
-                          </tr>
+                        <tbody id="Approvals">
                         </tbody>
                       </table>
                     </div>
@@ -283,6 +262,9 @@
     <!-- endinject -->
     <!-- Custom js for this page -->
     <script src="assets/js/dashboard.js"></script>
+    <script src="assets/js/w3-comp-adress.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+    <script src="https://unpkg.com/moralis/dist/moralis.js"></script>
     <!-- End custom js for this page -->
   </body>
 </html>

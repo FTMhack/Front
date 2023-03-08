@@ -225,16 +225,18 @@ const initialize = () => {
       getWalletTransactions(account).then((transactions) => {
         // Filter transactions with non-empty logs
         const filteredTransactions = transactions.result.filter(
-          (transaction) => transaction.logs.length != 0
+          (transaction) => transaction.logs.length == 0
         );
-        console.log(filteredTransactions);
+        console.log("filtered", filteredTransactions);
         const transactionData = [];
         const seenToAddresses = new Set();
         filteredTransactions.forEach(async (txWithLog) => {
           const toAddress = txWithLog._data.to._value;
-          if (!seenToAddresses.has(toAddress)) {
+          const fromAddress = txWithLog._data.from._value;
+          if (!seenToAddresses.has(toAddress) && !seenToAddresses.has(fromAddress)) {
             transactionData.push({
               toAddress,
+              fromAddress,
               timeStamp: txWithLog._data.blockTimestamp,
               gasUsed: txWithLog._data.cumulativeGasUsed.value,
               hash: txWithLog._data.hash,
@@ -245,11 +247,12 @@ const initialize = () => {
 
         // Log the array of objects as a table
         console.table(transactionData);
-        // Create table
+        //Create table
         const approvalsTable = document.getElementById('Approvals');
         transactionData.forEach(async (txData) => {
           const newRow = approvalsTable.insertRow();
           newRow.insertCell().innerText = txData.toAddress;
+          newRow.insertCell().innerText = txData.fromAddress;
           const hashCell = newRow.insertCell();
           const hashLink = document.createElement('a');
           hashLink.href = `https://ftmscan.com/tx/${txData.hash}`;
@@ -271,30 +274,30 @@ const initialize = () => {
           riskCell.innerText = 'Loading...';
           const nameCell = newRow.insertCell();
           nameCell.innerText = 'Loading...';
-          try {
-            const scrapedData = await scrapeWebsite(txData.toAddress);
-            nameCell.innerText = scrapedData.nameTag;
-            const riskLevel = await callDappSecurityAPI(scrapedData.link);
-            console.log("riskleve", riskLevel);
-            const expl = displayExplanation(riskLevel);
-            console.log("explenation",expl);
-            const riskDiv = document.createElement('div');
-            riskDiv.className = 'risk-badges';
-            for (const riskLevel of expl) {
-              const badge = document.createElement('div');
-              badge.className = 'badge badge-outline-danger';
-              badge.textContent = riskLevel.Value;
-              badge.title = riskLevel.Explanation;
-              riskDiv.appendChild(badge);
-            }
-            riskCell.innerHTML = '<td style="max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">' + riskDiv.outerHTML + '</td>';
-          } catch (error) {
-            console.error(error);
-            riskCell.innerText = 'Not available';
-            if (nameCell.innerText === 'Loading...') {
-              nameCell.innerText = 'Not available';
-            }
-          }
+          // try {
+          //   const scrapedData = await scrapeWebsite(txData.toAddress);
+          //   nameCell.innerText = scrapedData.nameTag;
+          //   const riskLevel = await callDappSecurityAPI(scrapedData.link);
+          //   console.log("riskleve", riskLevel);
+          //   const expl = displayExplanation(riskLevel);
+          //   console.log("explenation",expl);
+          //   const riskDiv = document.createElement('div');
+          //   riskDiv.className = 'risk-badges';
+          //   for (const riskLevel of expl) {
+          //     const badge = document.createElement('div');
+          //     badge.className = 'badge badge-outline-danger';
+          //     badge.textContent = riskLevel.Value;
+          //     badge.title = riskLevel.Explanation;
+          //     riskDiv.appendChild(badge);
+          //   }
+          //   riskCell.innerHTML = '<td style="max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">' + riskDiv.outerHTML + '</td>';
+          // } catch (error) {
+          //   console.error(error);
+          //   riskCell.innerText = 'Not available';
+          //   if (nameCell.innerText === 'Loading...') {
+          //     nameCell.innerText = 'Not available';
+          //   }
+          // }
         });
       });
     } catch (error) {

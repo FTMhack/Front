@@ -335,7 +335,7 @@ const initialize = () => {
               const badge = document.createElement('div');
               badge.className = 'badge badge-outline-danger';
               badge.textContent = riskLevel.Value;
-              badge.title = riskLevel.Explanation;
+              badge.title = riskLevel.Explaination;
               riskDiv.appendChild(badge);
             }
             riskCell.innerHTML = '<td style="max-width: 100px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">' + riskDiv.outerHTML + '</td>';
